@@ -1,28 +1,18 @@
 // app/product/[id]/page.jsx
-
 async function getProduct(id) {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 seconds delay
-  
-    // Fake data (you can fetch real API too)
-    return {
-      id,
-      name: `Product ${id}`,
-      description: `This is the description for product ${id}`,
-    };
+    const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+    if (!res.ok) throw new Error("Failed to fetch product");
+    return res.json();
   }
   
   export default async function ProductPage({ params }) {
-    const { id } = params;
-    const product = await getProduct(id);
+    const product = await getProduct(params.id);
   
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Product Details</h1>
-        <div className="border p-4 rounded shadow">
-          <h2 className="text-xl font-semibold">{product.name}</h2>
-          <p className="text-gray-600 mt-2">{product.description}</p>
-        </div>
+        <h1 className="text-2xl font-bold mb-4">{product.title}</h1>
+        <p className="text-gray-700">{product.description}</p>
+        <p className="mt-2 font-semibold">Price: ${product.price}</p>
       </div>
     );
   }
